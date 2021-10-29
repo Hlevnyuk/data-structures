@@ -71,8 +71,7 @@ public class ArrayQueue implements Queue{
             if (i == size - 1) {
                 break;
             } else {
-                string = string + ",";
-                string = string + " ";
+                string = string + ", ";
             }
         }
         return "[" + string + "]";
