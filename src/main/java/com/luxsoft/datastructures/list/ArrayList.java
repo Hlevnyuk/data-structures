@@ -1,5 +1,9 @@
 package com.luxsoft.datastructures.list;
-public class ArrayList implements List{
+
+import java.util.Iterator;
+import java.util.StringJoiner;
+
+public class ArrayList implements List, Iterable{
     private int size;
     Object[] array;
     public ArrayList(int capacity) {
@@ -136,18 +140,33 @@ public class ArrayList implements List{
     }
     @Override
     public String toString() {
-        if (isEmpty()) {
+        if(isEmpty()){
             return "[]";
         }
-        StringBuilder result = new StringBuilder();
-        result.append("[");
-        for (int i = 0; i < size; i++) {
-            result.append(array[i]);
-            if (i == size - 1) {
-                return result.append(']').toString();
-            }
-            result.append(", ");
+        StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
+        ArrayList list = ArrayList.this;
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()){
+            stringJoiner.add(iterator.next().toString());
         }
-        return result.toString();
+        return stringJoiner.toString();
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new ArrayListIterator();
+    }
+    private class ArrayListIterator implements Iterator {
+        private int position = 0;
+        @Override
+        public boolean hasNext() {
+            return position<size;
+        }
+        @Override
+        public Object next() {
+            Object value = array[position];
+            position++;
+            return value;
+        }
     }
 }

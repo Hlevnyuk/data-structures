@@ -41,7 +41,6 @@ public class ArrayListTest {
     void testAddByIndexNullElementThrowIllegalStateException() {
         ArrayList list = new ArrayList(1);
         list.add(2);
-
         assertThrows(IllegalStateException.class, () -> {
             list.add(null, 1);
         });
@@ -61,7 +60,6 @@ public class ArrayListTest {
     void testAddElementsByIndexToEmptyListThrowsIllegalStateException() {
         ArrayList listOne = new ArrayList(0);
         ArrayList listTwo = new ArrayList(5);
-
         assertThrows(IllegalStateException.class, () -> {
             listOne.add(2, 0);
             listTwo.add(2, 0);
@@ -197,7 +195,6 @@ public class ArrayListTest {
         assertThrows(IllegalStateException.class, () -> {
             list.set(null, 0);
         });
-
     }
     @DisplayName("Test set index out of bound in list throws IndexOutOfBoundsException")
     @Test
