@@ -3,22 +3,22 @@ package com.luxsoft.datastructures.list;
 import java.util.Iterator;
 import java.util.StringJoiner;
 
-public class ArrayList implements List, Iterable{
+public class ArrayList<T> implements List<T>, Iterable{
     private int size;
-    Object[] array;
+    T[] array;
     public ArrayList(int capacity) {
-        array = new Object[capacity];
+        array = (T[]) new Object[capacity];
     }
     public ArrayList() {
-        array = new Object[10];
+        array = (T[]) new Object[10];
     }
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         if (value == null) {
             throw new IllegalStateException("Null element is not supported");
         }
         if (size == array.length) {
-            Object[] toResized = new Object[(int) (array.length * 1.5)];
+            T[] toResized = (T[])new Object[(int) (array.length * 1.5)];
             System.arraycopy(array, 0, toResized, 0, array.length);
             array = toResized;
         }
@@ -26,7 +26,7 @@ public class ArrayList implements List, Iterable{
         size++;
     }
     @Override
-    public void add(Object value, int index) {
+    public void add(T value, int index) {
         if (isEmpty()) {
             throw new IllegalStateException("List capacity is 0");
         }
@@ -37,30 +37,30 @@ public class ArrayList implements List, Iterable{
             throw new IndexOutOfBoundsException();
         }
         if (size == array.length) {
-            Object[] toResized = new Object[(int) (array.length * 1.5)];
+            T[] toResized = (T[]) new Object[(int) (array.length * 1.5)];
             System.arraycopy(array, 0, toResized, 0, array.length);
             array = toResized;
         }
-        for (int i = index; i < size; i++) {
-            array[i + 1] = array[i];
+        if (size - index >= 0) {
+            System.arraycopy(array, index, array, index + 1, size - index);
         }
         size++;
         array[index] = value;
     }
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
-        Object removedElement = array[index];
+        T removedElement = array[index];
         size--;
-        for (int i = index; i < size; i++) {
-            array[i] = array[i + 1];
+        if (size - index >= 0) {
+            System.arraycopy(array, index + 1, array, index, size - index);
         }
         return removedElement;
     }
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         if (isEmpty()) {
             return null;
         }
@@ -70,7 +70,7 @@ public class ArrayList implements List, Iterable{
         return array[index];
     }
     @Override
-    public Object set(Object value, int index) {
+    public T set(T value, int index) {
         if (isEmpty()) {
             return null;
         }
@@ -80,7 +80,7 @@ public class ArrayList implements List, Iterable{
         if (index < 0 || size <= index) {
             throw new IndexOutOfBoundsException();
         }
-        Object toSet = array[index];
+        T toSet = array[index];
         array[index] = value;
         return toSet;
     }
@@ -100,7 +100,7 @@ public class ArrayList implements List, Iterable{
         return size == 0;
     }
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         if (isEmpty()) {
             return false;
         }
@@ -115,7 +115,7 @@ public class ArrayList implements List, Iterable{
         return false;
     }
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(T value) {
         if (value == null) {
             throw new IllegalStateException("Null element is not supported");
         }
@@ -127,7 +127,7 @@ public class ArrayList implements List, Iterable{
         return -1;
     }
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(T value) {
         if (value == null) {
             throw new IllegalStateException("Null element is not supported");
         }
@@ -144,10 +144,9 @@ public class ArrayList implements List, Iterable{
             return "[]";
         }
         StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
-        ArrayList list = ArrayList.this;
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()){
-            stringJoiner.add(iterator.next().toString());
+        ArrayList<T> list = ArrayList.this;
+        for (Object o : list) {
+            stringJoiner.add(o.toString());
         }
         return stringJoiner.toString();
     }
@@ -163,8 +162,8 @@ public class ArrayList implements List, Iterable{
             return position<size;
         }
         @Override
-        public Object next() {
-            Object value = array[position];
+        public T next() {
+            T value = array[position];
             position++;
             return value;
         }
